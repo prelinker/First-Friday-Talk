@@ -1,0 +1,18 @@
+# Heavy files
+*.mp4
+
+# PHP Storm, other java IDE's
+.idea
+
+# Python
+*.pyc
+
+# OS X
+.DS_Store
+._*
+
+# Windows
+Thumbs.db
+
+# Vagrant
+.vagrant
