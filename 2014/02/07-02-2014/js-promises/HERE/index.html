@@ -1,0 +1,244 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+	<title>JS Promises/A+</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=792, user-scalable=no">
+	<meta http-equiv="x-ua-compatible" content="ie=edge">
+	<link rel="stylesheet" href="../bower_components/shower-ribbon/styles/screen.css">
+	<link rel="stylesheet" href="../static/prism/prism.css">
+	<link rel="stylesheet" href="../static/presentation.css">
+	<link rel="stylesheet" href="index.css">
+</head>
+<body class="list full">
+	<header class="caption">
+		<h1>JS Promises/A+</h1>
+	</header>
+	
+	<section class="slide cover" id="Cover"><div>
+		<h2>JS Promises/A+</h2>
+		<!-- <p>Présenté par <a href="//mathieu.rochette.cc">Mathieu Rochette</a></p> -->
+		<img src="pictures/cover.jpg" alt="">
+	</div></section>
+	
+	<section class="slide"><div>
+		<p><center><img src="pictures/tweet-promises.png" alt=""></center></p>
+		<h2 class="next">WTF?</h2>
+	</div></section>
+	
+	<section class="slide"><div>
+		<h2>Version Synchrone</h2>
+		<pre class="line-numbers"><code class="language-javascript">sync.printArtistAlbums = function (artistName) {
+	var artist = sync.findArtist(artistName);
+	var albums = sync.findAlbums(artist);
+	sync.render(albums);
+};</code></pre>
+		<pre class="inline-code"><code class="language-javascript eval-javascript">try {
+	sync.printArtistAlbums('Josh Woodward');
+}
+catch(exception) {
+	alert(exception);
+}</code></pre>
+	</div></section>
+	
+	<section class="slide"><div>
+		<h2>Error handling</h2>
+		<pre class="inline-code"><code class="language-javascript eval-javascript">try {
+	sync.printArtistAlbums('Coco l\'asticot');
+}
+catch(exception) {
+	alert(exception);
+}</code></pre>
+	</div></section>
+	
+	<section class="slide"><div>
+		<h2>Version Asynchrone&nbsp;: Callback (Optimiste)</h2>
+		<pre class="line-numbers"><code class="language-javascript">cb.printArtistAlbums = function (artistName) {
+	cb.findArtist(artistName, function(artist) {
+		cb.findAlbums(artist, function(albums) {
+			cb.render(albums);
+		});
+	});
+};</code></pre>
+		<pre class="inline-code"><code class="language-javascript eval-javascript">cb.printArtistAlbums('Pomplamoose');</code></pre>
+		<pre class="inline-code next"><code class="language-javascript eval-javascript">try {
+	cb.printArtistAlbums('Provencal le gaulois');
+}
+catch(exception) {
+	alert(exception);
+}</code></pre>
+	</div></section>
+	
+	<section class="slide"><div>
+		<h2>Version Asynchrone&nbsp;: Callback</h2>
+		<pre class="line-numbers"><code class="language-javascript">cb.printArtistAlbums = function(artistName, callback) {
+	cb.findArtist(artistName, function(err, artist) {
+		if(err) {
+			return callback(err);
+		}
+		cb.findAlbums(artist, function(err, albums) {
+			if(err) {
+				return callback(err);
+			}
+			cb.render(albums, callback);
+		});
+	});
+};</code></pre>
+	</div></section>
+	
+	<section class="slide"><div>
+		<pre class="inline-code"><code class="language-javascript eval-javascript">cb.printArtistAlbums('Lindsey Stirling', function(err) {
+	if(err) {
+		alert(err);
+	}
+});</code></pre>
+		<pre class="inline-code"><code class="language-javascript eval-javascript">cb.printArtistAlbums('Beau trouvé', function(err) {
+	if(err) {
+		alert(err);
+	}
+});</code></pre>
+	</div></section>
+	
+	<section class="slide"><div>
+		<h2>Version Asynchrone&nbsp;: Promise</h2>
+		<pre class="line-numbers"><code class="language-javascript">promise.printArtistAlbums = function(artistName) {
+	return promise.findArtist(artistName)
+		.then(promise.findAlbums)
+		.then(promise.render);
+};</code></pre>
+		<pre class="inline-code"><code class="language-javascript eval-javascript">promise.printArtistAlbums('Ludovico')
+	.then(undefined, alert);</code></pre>
+		<pre class="inline-code"><code class="language-javascript eval-javascript">promise.printArtistAlbums('Le sanglier de Cornouailles')
+	.then(undefined, alert);</code></pre>
+	</div></section>
+	
+	<section class="slide"><div>
+		<h2>Faire une promesse 1/2</h2>
+		<pre class="line-numbers"><code class="language-javascript">cb.getURL = function(url, callback) {
+	var request = new XMLHttpRequest();
+	request.open('GET', url);
+	request.send();
+	
+	request.onload = function() {
+		if(request.status !== 200) {
+			callback('request failed');
+		}
+		
+		callback(null, this.response);
+	};
+};</code></pre>
+	</div></section>
+	
+	<section class="slide"><div>
+		<h2>Faire une promesse 2/2</h2>
+		<pre class="line-numbers"><code class="language-javascript">promise.getURL = function(url) {
+	var deferred = Q.defer();
+	
+	var request = new XMLHttpRequest();
+	request.open('GET', url);
+	request.send();
+	
+	request.onload = function() {
+		if(request.status !== 200) {
+			deferred.reject('request failed');
+		}
+		
+		deferred.resolve(this.response);
+	};
+	
+	return deferred.promise;
+};</code></pre>
+	</div></section>
+	
+	<section class="slide"><div>
+		<h2>Error handling</h2>
+		<pre class="line-numbers"><code class="language-javascript">sync.getJson = function(url) {
+	var response = sync.getURL(url);
+	return JSON.parse(response);
+};</code></pre>
+	</div></section>
+	
+	<section class="slide"><div>
+		<h2>Error handling</h2>
+		<pre class="line-numbers"><code class="language-javascript">sync.getJson = function(url) {
+	var response = sync.getURL(url);
+	return JSON.parse(response);
+};
+
+cb.getJson = function(url, callback) {
+	cb.getURL(url, function(err, response) {
+		if(err) {
+			return callback(err);
+		}
+		
+		try {
+			callback(null, JSON.parse(response));
+		}
+		catch(exception) {
+			callback(exception);
+		}
+	});
+};</code></pre>
+	</div></section>
+	
+	<section class="slide"><div>
+		<h2>Error handling</h2>
+		<pre class="line-numbers"><code class="language-javascript">sync.getJson = function(url) {
+	var response = sync.getURL(url);
+	return JSON.parse(response);
+};
+
+promise.getJson = function(url) {
+	return promise.getURL(url).then(JSON.parse/*, undefined*/);
+};</code></pre>
+	</div></section>
+	
+	<section class="slide"><div>
+		<h2>Extensions</h2>
+		<pre class="line-numbers"><code class="language-javascript">// Promesses en parallèles
+var tracksDownloading = tracks.map(downloadTrack);
+Q.all(tracks).then(zip);
+
+// Avancement
+download().then(open, handleError, updateProgress);
+
+// convertir des fonctions nodeJS
+var readFile = Q.denodeify(FS.readFile);
+readFile("foo.json", "utf-8").then(JSON.parse);
+
+// timeout
+getURL(url).timeout(2000, 'plus de 2s: trop long');
+
+// delai
+showAd().delay(15000).then(hideAd);</code></pre>
+	</div></section>
+	
+	<section class="slide"><div>
+		<h2>Version Asynchrone&nbsp;: Promise + Generator</h2>
+		<pre class="line-numbers"><code class="language-javascript">pg.printArtistAlbums = Q.async(function*(artistName) {
+	var artist = yield promise.findArtist(artistName);
+	var albums = yield promise.findAlbums(artist);
+	promise.render(albums);
+});</code></pre>
+		<pre class="inline-code"><code class="language-javascript eval-javascript">pg.printArtistAlbums('Oaï Star')
+	.then(undefined, alert);</code></pre>
+		<pre class="inline-code"><code class="language-javascript eval-javascript">pg.printArtistAlbums('le Chevalier au Lion')
+	.then(undefined, alert);</code></pre>
+	</div></section>
+	
+	<div class="progress"><div></div></div>
+	
+	<div id="container">
+		<div class="content">
+			<h2></h2>
+			<ul></ul>
+		</div>
+	</div>
+	
+	<script src="../bower_components/shower/shower.min.js"></script>
+	<script src="../static/prism/prism.js"></script>
+	<script src="../static/presentation.js"></script>
+	<script src="bower_components/q/q.js"></script>
+	<script src="index.js"></script>
+</body>
+</html>

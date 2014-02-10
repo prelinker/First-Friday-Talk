@@ -1,0 +1,14 @@
+{
+  "name": "shower-ribbon",
+  "homepage": "https://github.com/shower/ribbon",
+  "_release": "e715c0e13e",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "e715c0e13e52c0830fde52df53bee3895d286b70"
+  },
+  "_source": "git://github.com/shower/ribbon.git",
+  "_target": "*",
+  "_originalSource": "shower/ribbon",
+  "_direct": true
+}

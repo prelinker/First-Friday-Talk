@@ -1,0 +1,14 @@
+{
+  "name": "shower",
+  "homepage": "https://github.com/shower/shower",
+  "_release": "c4755155be",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "c4755155be2b8da2b8ac6e0b219d6c7caf1fb0cd"
+  },
+  "_source": "git://github.com/shower/shower.git",
+  "_target": "*",
+  "_originalSource": "shower/shower",
+  "_direct": true
+}
