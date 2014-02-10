@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="fr" ng-app>
+	<head>
+		<meta http-equiv="Content-type" content="text/html; charset=utf-8">
+		<title>index</title>	
+		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.3/angular.min.js"></script>
+		<script>
+		function FirstFridayCtrl($scope, $http) {
+			$scope.world = 'world!';
+			
+			$scope.users = [];
+			
+			$scope.addUser = function() {
+				var firstName = $scope.new_firstName;
+				var lastName = $scope.new_lastName;
+				var age = $scope.new_age;
+				
+				$scope.users.push({
+					"firstName": firstName,
+					"lastName": lastName,
+					"age": parseInt(age),
+					"countries": []
+				});
+				
+				$scope.new_firstName = '';
+				$scope.new_lastName = '';
+				$scope.new_age = '';
+			}
+			
+			$scope.mafia = function() {
+				$http.get('http://my.yohan.lab.easyflirt.com/first_friday/users.php').success(function(data) {
+					for(user in data) {
+						$scope.users.push(data[user]);
+					}
+					
+					setTimeout(function() {
+						$scope.$apply(function(){
+						$scope.users.push({
+							"firstName": "te",
+							"lastName": "totot",
+							"age": 22
+						}, 2000);
+						});
+					});
+				});
+			}
+			
+			$scope.delete = function(index) {
+				$scope.users.splice(index, 1);
+			}
+			
+			$scope.save = function() {
+				$http.post('http://my.yohan.lab.easyflirt.com/first_friday/saveUsers.php', {
+					"users": JSON.stringify($scope.users)
+				});
+			}
+		}
+		
+		function SecondTalkCtrl($scope) {
+			$scope.users = ["toto", "Tata"];
+		}
+		</script>
+		
+	</head>
+	<body>
+		
+		<div ng-controller="FirstFridayCtrl" ng-init="mafia()">
+		<input type="text" ng-model="world" />
+		Hello {{world}}
+		
+		<hr />
+		
+		{{users.length}}
+		
+		<hr />
+		
+		<select ng-model="triSelectif">
+			<option value="firstName">First Name</option>
+			<option value="lastName">Last Name</option>
+			<option value="age">Age</option>
+		</select>
+		
+		<input type="checkbox" ng-model="reverse" />
+		
+		<hr />
+		
+		<input type="text" ng-model="search.firstName" />
+		
+		<hr />
+		
+		<div id="users">
+			<div class="user" ng-repeat="user in users | orderBy:triSelectif:reverse | filter:search">
+				{{user.firstName}} {{user.lastName}}
+				<p>Ce monsieur ou madame a : {{user.age}}</p>
+				
+				<ul>
+					<li ng-repeat="country in user.countries">
+						{{country}}
+					</li>
+				</ul>
+				
+				<p>
+					<a href="#" ng-click="delete($index)">Delete</a>
+				</p>
+				
+				<hr />
+			</div>
+		</div>
+		
+		<div id="add-users">
+			<form ng-submit="users.push(newusers)">
+				<input type="text" ng-model="newusers.firstname" /><br />
+				<input type="text" ng-model="new_lastName" /> <br />
+				<input type="text" ng-model="new_age" /><br />
+				<input type="submit" value="SAVE THE WORLD !" ng-disabled="users.length > 4" />
+				<input type="button" value="Save vraiment !" ng-click="save()" />
+			</form>
+		</div>
+	</div>
+	<hr />
+	<div ng-controller="SecondTalkCtrl">
+		{{users.length}}
+	</div>
+	
+	</body>
+</html>
