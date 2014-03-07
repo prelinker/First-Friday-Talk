@@ -1,0 +1,21 @@
+VAGRANTFILE_API_VERSION = "2"
+
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+
+  config.vm.define "web" do |web|
+    web.vm.box = "debian-webdev"
+  end
+
+  config.vm.define "db.master" do |db|
+    db.vm.box = "debian-mysql"
+  end
+  
+  config.vm.define "db.slave1" do |db|
+    db.vm.box = "debian-mysql"
+  end
+  
+  config.vm.define "db.slave2" do |db|
+    db.vm.box = "debian-mysql"
+  end
+
+end
