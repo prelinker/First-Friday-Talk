@@ -1,0 +1,14 @@
+<table class="table table-condensed" ng-show="ffts.length >0">
+	<caption><h2>FFTS</h2></caption>
+	<tr ng-repeat="fft in ffts">
+		<td>{{fft.name}}</td>
+		<td width="100">
+			<a class="btn btn-info" ng-href="/#/edit/{{fft._id}}">
+				<span class="glyphicon glyphicon-pencil"></span>
+			</a>
+			<button class="btn btn-danger" ng-click="delete(fft)">
+				<span class="glyphicon glyphicon-trash"></span>
+			</button>
+		</td>
+	</tr>
+</table>
