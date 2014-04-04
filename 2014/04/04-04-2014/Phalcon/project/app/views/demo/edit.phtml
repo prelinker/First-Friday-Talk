@@ -1,0 +1,21 @@
+<h5>Formulaire Editer</h5>
+
+<?php echo $this->tag->form('demo/edit?id=' . $user_id); ?>
+
+nom : <?php echo $this->tag->textField(array('lastname')); ?><br />
+Prénom : <?php echo $this->tag->textField(array('firstname')); ?><br />
+Height : <?php echo $this->tag->textField(array('height')); ?><br />
+Weight : <?php echo $this->tag->textField(array('weight')); ?><br />
+<br />
+<?php echo $this->tag->submitButton('save'); ?>
+
+<?php echo $this->tag->endForm(); ?>
+
+<?php if (isset($form_errors)): ?>
+	Désolé, nous avons rencontré les problèmes suivants durant l'enregistrement de votre formulaire :
+	<ul>
+	<?php foreach ($form_errors as $message): ?>
+		<li><?php echo $message->getMessage(); ?></li>
+	<?php endforeach; ?>
+	</ul>
+<?php endif; ?>
