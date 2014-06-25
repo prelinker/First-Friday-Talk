@@ -1,0 +1,3 @@
+[submodule "2014/05/20-05-2104/behat-phpspec"]
+	path = 2014/05/20-05-2104/behat-phpspec
+	url = git@github.com:prelinker/fft-bdd.git
